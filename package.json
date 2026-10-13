@@ -1,0 +1,15 @@
+{
+  "name": "mahadeva-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Muthabathula Mahadeva's creative portfolio website.",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "build": "node build.mjs"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "nodemailer": "^6.10.1"
+  }
+}
