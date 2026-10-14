@@ -53,7 +53,9 @@ button { color: inherit; }
 .eyebrow { display: flex; align-items: center; gap: .7rem; margin: 0; color: var(--muted); font-size: .64rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
 .eyebrow-line { width: 2rem; height: 1px; background: var(--clay); }
 h1, h2, h3, p { margin-top: 0; }
-h1, h2, h3 { font-family: var(--title-font); font-weight: 400; line-height: .92; }
+h1, h2, h3 { font-weight: 500; line-height: .92; }
+h1, h2 { font-family: var(--title-font); font-weight: 400; }
+h3 { font-family: var(--serif); }
 h1 em, h2 em { color: var(--clay); font-style: italic; }
 h1 { max-width: 9ch; margin: 2rem 0 1.7rem; font-size: clamp(4.5rem, 11vw, 9.4rem); letter-spacing: -.055em; }
 h2 { margin: 1.8rem 0 2rem; font-size: clamp(3.6rem, 8vw, 7.2rem); letter-spacing: -.05em; }
