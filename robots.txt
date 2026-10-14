@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mahadevamuthabathula.github.io/Mahadeva-Muthabathula-Portfolio/sitemap.xml
