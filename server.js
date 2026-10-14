@@ -121,10 +121,18 @@ async function handleEnquiry(request, response) {
 }
 
 function safePath(urlPath) {
-  const cleanPath = decodeURIComponent(urlPath.split('?')[0]);
+  let cleanPath;
+  try {
+    cleanPath = decodeURIComponent(urlPath.split('?')[0]);
+  } catch {
+    return null;
+  }
   const requested = cleanPath === '/' ? '/index.html' : cleanPath;
   const resolved = path.resolve(root, `.${requested}`);
-  return resolved.startsWith(root) ? resolved : null;
+  const relativePath = path.relative(root, resolved);
+  return relativePath === '..' || relativePath.startsWith(`..${path.sep}`) || path.isAbsolute(relativePath)
+    ? null
+    : resolved;
 }
 
 const server = http.createServer(async (request, response) => {

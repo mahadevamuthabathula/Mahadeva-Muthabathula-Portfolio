@@ -8,6 +8,7 @@ await cp('robots.txt', 'dist/robots.txt');
 await cp('styles.css', 'dist/styles.css');
 await cp('script.js', 'dist/script.js');
 await cp('favicon.svg', 'dist/favicon.svg');
+await cp('instagram-logo.svg', 'dist/instagram-logo.svg');
 await cp('project-icon.png', 'dist/project-icon.png');
 await cp('hero-portrait.jpeg', 'dist/hero-portrait.jpeg');
 await cp('team-card-a.jpeg', 'dist/team-card-a.jpeg');
