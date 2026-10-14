@@ -64,15 +64,14 @@ function showToast(message) {
   toastTimer = setTimeout(() => toast.classList.remove('is-visible'), 4200);
 }
 
-form?.addEventListener('submit', async (event) => {
+form?.addEventListener('submit', (event) => {
   event.preventDefault();
   const formData = new FormData(form);
   const name = String(formData.get('name') || '').trim();
   const email = String(formData.get('email') || '').trim();
   const message = String(formData.get('message') || '').trim();
-  const submitButton = form.querySelector('button[type="submit"]');
   if (!formStatus) {
-    showToast('Unable to send the enquiry. Please email mahadevamuthabathula@gmail.com directly.');
+    showToast('Please email your enquiry to mahadevamuthabathula@gmail.com.');
     return;
   }
   if (!name || !email || !message) {
@@ -80,23 +79,18 @@ form?.addEventListener('submit', async (event) => {
     return;
   }
 
-  if (submitButton) submitButton.disabled = true;
-  formStatus.textContent = 'Sending your enquiry…';
-  try {
-    const response = await fetch('/api/enquiry', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, message })
-    });
-    const result = await response.json();
-    if (!response.ok) throw new Error(result.error || 'Your enquiry could not be sent.');
-    formStatus.textContent = result.message;
-    form.reset();
-  } catch (error) {
-    formStatus.textContent = error.message || 'Your enquiry could not be sent. Please try again.';
-  } finally {
-    if (submitButton) submitButton.disabled = false;
-  }
+  const subject = encodeURIComponent(`Portfolio enquiry from ${name}`);
+  const body = encodeURIComponent(`Name: ${name}\r\nEmail: ${email}\r\n\r\n${message}`);
+  const mailto = `mailto:mahadevamuthabathula@gmail.com?subject=${subject}&body=${body}`;
+  const fallbackLink = document.createElement('a');
+  fallbackLink.href = mailto;
+  fallbackLink.textContent = 'click here to open your email app';
+  formStatus.replaceChildren(
+    document.createTextNode('Your email app should open with the enquiry ready. Click Send there. If it does not open, '),
+    fallbackLink,
+    document.createTextNode('.')
+  );
+  window.location.href = mailto;
 });
 
 // Keep keyboard users able to open a portfolio card without changing the calm visual language.
