@@ -6,6 +6,7 @@ await cp('index.html', 'dist/index.html');
 await cp('sitemap.xml', 'dist/sitemap.xml');
 await cp('robots.txt', 'dist/robots.txt');
 await cp('styles.css', 'dist/styles.css');
+await cp('fonts', 'dist/fonts', { recursive: true });
 await cp('some-time-later.otf', 'dist/some-time-later.otf');
 await cp('script.js', 'dist/script.js');
 await cp('favicon.svg', 'dist/favicon.svg');

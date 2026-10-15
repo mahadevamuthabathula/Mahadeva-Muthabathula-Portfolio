@@ -1,7 +1,15 @@
 const menuToggle = document.querySelector('.menu-toggle');
 const primaryNav = document.querySelector('.primary-nav');
+const siteHeader = document.querySelector('[data-header]');
 const navLinks = [...document.querySelectorAll('[data-nav-link]')];
 const sections = [...document.querySelectorAll('main section[id]')];
+
+function updateHeaderScrollState() {
+  siteHeader?.classList.toggle('is-scrolled', window.scrollY > 8);
+}
+
+updateHeaderScrollState();
+window.addEventListener('scroll', updateHeaderScrollState, { passive: true });
 
 function closeMenu() {
   if (!menuToggle || !primaryNav) return;
