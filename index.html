@@ -122,29 +122,29 @@
       <section class="portfolio section-shell section-lined" id="portfolio" aria-labelledby="portfolio-title">
         <div class="portfolio-heading">
           <div class="reveal"><h2 id="portfolio-title">Frames from<br /><em>the process.</em></h2></div>
-        </div>
-        <div class="filter-bar" role="toolbar" aria-label="Filter portfolio projects">
-          <button class="filter-button is-active" type="button" data-filter="all">All work</button>
-          <button class="filter-button" type="button" data-filter="3d">3D art</button>
-          <button class="filter-button" type="button" data-filter="texture">Texture</button>
+          <div class="filter-bar" role="toolbar" aria-label="Filter portfolio projects">
+            <button class="filter-button is-active" type="button" data-filter="all" aria-pressed="true">All work</button>
+            <button class="filter-button" type="button" data-filter="3d" aria-pressed="false">3D art</button>
+            <button class="filter-button" type="button" data-filter="texture" aria-pressed="false">Texture</button>
+          </div>
         </div>
         <div class="work-grid">
-          <article class="work-card reveal" data-category="3d" tabindex="0">
-            <div class="work-visual visual-01"><img src="./afterlight-environment-study.jpg" alt="" /><span class="visual-tag">01 / 3D</span></div>
-            <div class="work-info"><div><p class="work-type">Environment study</p><h3>Afterlight / 01</h3></div><span class="work-arrow" aria-hidden="true">↗</span></div>
+          <article class="work-card reveal" data-category="3d">
+            <div class="work-visual"><img src="./afterlight-environment-study.jpg" alt="" /></div>
+            <div class="work-info"><div><p class="work-type">Environment study</p><h3>Afterlight / 01</h3></div></div>
           </article>
-          <article class="work-card reveal reveal-delay" data-category="texture" tabindex="0">
-            <div class="work-visual visual-02"><img src="./soft-machinery-texture.jpg" alt="" /><span class="visual-tag">02 / Texture</span></div>
-            <div class="work-info"><div><p class="work-type">Material & surface</p><h3>Soft Machinery</h3></div><span class="work-arrow" aria-hidden="true">↗</span></div>
-          </article>
-          <article class="work-card reveal reveal-delay" data-category="3d texture">
-            <div class="work-visual visual-04"><img src="./between-forms-object-texture.jpg" alt="" /><span class="visual-tag">04 / Study</span></div>
-            <div class="work-info"><div><p class="work-type">Object & texture</p><h3>Between Forms</h3></div><span class="work-arrow" aria-hidden="true">↗</span></div>
+          <article class="work-card reveal reveal-delay" data-category="texture">
+            <div class="work-visual"><img src="./soft-machinery-texture.jpg" alt="" /></div>
+            <div class="work-info"><div><p class="work-type">Material & surface</p><h3>Soft Machinery</h3></div></div>
           </article>
           <a class="work-card reveal" data-category="post" href="./edit-grade.html" aria-label="View Blue Hour, Cut Two film edit and color grade project">
-            <div class="work-visual visual-03"><img src="./blue-hour-cut-two.jpeg" alt="" /><span class="visual-tag">03 / Post</span></div>
+            <div class="work-visual"><img src="./blue-hour-cut-two.jpeg" alt="" /></div>
             <div class="work-info"><div><p class="work-type">Film edit & DI</p><h3>Blue Hour, Cut Two</h3></div><span class="work-arrow" aria-hidden="true">↗</span></div>
           </a>
+          <article class="work-card reveal reveal-delay" data-category="3d texture">
+            <div class="work-visual"><img src="./between-forms-object-texture.jpg" alt="" /></div>
+            <div class="work-info"><div><p class="work-type">Object & texture</p><h3>Between Forms</h3></div></div>
+          </article>
         </div>
       </section>
 

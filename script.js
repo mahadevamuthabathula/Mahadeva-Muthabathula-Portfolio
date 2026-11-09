@@ -51,7 +51,11 @@ const workCards = [...document.querySelectorAll('.work-card')];
 filterButtons.forEach((button) => {
   button.addEventListener('click', () => {
     const filter = button.dataset.filter;
-    filterButtons.forEach((item) => item.classList.toggle('is-active', item === button));
+    filterButtons.forEach((item) => {
+      const isActive = item === button;
+      item.classList.toggle('is-active', isActive);
+      item.setAttribute('aria-pressed', String(isActive));
+    });
     workCards.forEach((card) => {
       const matches = filter === 'all' || card.dataset.category.split(' ').includes(filter);
       card.classList.toggle('is-hidden', !matches);
@@ -100,11 +104,3 @@ form?.addEventListener('submit', (event) => {
   );
   window.location.href = mailto;
 });
-
-// Keep keyboard users able to open a portfolio card without changing the calm visual language.
-workCards.filter((card) => card.tagName !== 'A').forEach((card) => card.addEventListener('keydown', (event) => {
-  if (event.key === 'Enter' || event.key === ' ') {
-    event.preventDefault();
-    showToast(`${card.querySelector('h3')?.textContent || 'Project'} — case study coming soon.`);
-  }
-}));
