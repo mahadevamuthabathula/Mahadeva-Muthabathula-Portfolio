@@ -1,6 +1,7 @@
 {
   "routes": [
     { "path": "/", "title": "Mahadeva — Creative Portfolio" },
-    { "path": "/edit-grade.html", "title": "Edit & Grade — Mahadeva Portfolio" }
+    { "path": "/edit-grade.html", "title": "Edit & Grade — Mahadeva Portfolio" },
+    { "path": "/material-surface.html", "title": "Material & Surface — Mahadeva Portfolio" }
   ]
 }
