@@ -76,31 +76,52 @@ function showToast(message) {
   toastTimer = setTimeout(() => toast.classList.remove('is-visible'), 4200);
 }
 
-form?.addEventListener('submit', (event) => {
+form?.addEventListener('submit', async (event) => {
   event.preventDefault();
-  const formData = new FormData(form);
-  const name = String(formData.get('name') || '').trim();
-  const email = String(formData.get('email') || '').trim();
-  const message = String(formData.get('message') || '').trim();
   if (!formStatus) {
     showToast('Please email your enquiry to mahadevamuthabathula@gmail.com.');
     return;
   }
+
+  const submitButton = form.querySelector('button[type="submit"]');
+  const formData = new FormData(form);
+  const name = String(formData.get('name') || '').trim();
+  const email = String(formData.get('email') || '').trim();
+  const message = String(formData.get('message') || '').trim();
   if (!name || !email || !message) {
     formStatus.textContent = 'Please complete all fields before sending your enquiry.';
     return;
   }
 
-  const subject = encodeURIComponent(`Portfolio enquiry from ${name}`);
-  const body = encodeURIComponent(`Name: ${name}\r\nEmail: ${email}\r\n\r\n${message}`);
-  const mailto = `mailto:mahadevamuthabathula@gmail.com?subject=${subject}&body=${body}`;
-  const fallbackLink = document.createElement('a');
-  fallbackLink.href = mailto;
-  fallbackLink.textContent = 'click here to open your email app';
-  formStatus.replaceChildren(
-    document.createTextNode('Your email app should open with the enquiry ready. Click Send there. If it does not open, '),
-    fallbackLink,
-    document.createTextNode('.')
-  );
-  window.location.href = mailto;
+  formData.set('_subject', `Portfolio enquiry from ${name}`);
+  if (submitButton) submitButton.disabled = true;
+  formStatus.textContent = 'Sending your enquiry…';
+
+  try {
+    const response = await fetch(form.action, {
+      method: form.method,
+      body: formData,
+      headers: { Accept: 'application/json' }
+    });
+    const result = await response.json();
+    if (!response.ok || (result.success !== true && result.success !== 'true')) {
+      throw new Error(result.message || 'The enquiry could not be sent.');
+    }
+
+    form.reset();
+    formStatus.textContent = 'Thanks — your enquiry has been sent. I’ll be in touch soon.';
+  } catch (error) {
+    const subject = encodeURIComponent(`Portfolio enquiry from ${name}`);
+    const body = encodeURIComponent(`Name: ${name}\r\nEmail: ${email}\r\n\r\n${message}`);
+    const fallbackLink = document.createElement('a');
+    fallbackLink.href = `mailto:mahadevamuthabathula@gmail.com?subject=${subject}&body=${body}`;
+    fallbackLink.textContent = 'send it by email instead';
+    formStatus.replaceChildren(
+      document.createTextNode(`${error.message} Please try again or `),
+      fallbackLink,
+      document.createTextNode('.')
+    );
+  } finally {
+    if (submitButton) submitButton.disabled = false;
+  }
 });
