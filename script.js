@@ -93,15 +93,20 @@ form?.addEventListener('submit', async (event) => {
     return;
   }
 
-  formData.set('_subject', `Portfolio enquiry from ${name}`);
+  const payload = Object.fromEntries(formData.entries());
+  payload._subject = `Portfolio enquiry from ${name}`;
+  payload._replyto = email;
   if (submitButton) submitButton.disabled = true;
   formStatus.textContent = 'Sending your enquiry…';
 
   try {
     const response = await fetch(form.action, {
       method: form.method,
-      body: formData,
-      headers: { Accept: 'application/json' }
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
     });
     const result = await response.json();
     if (!response.ok || (result.success !== true && result.success !== 'true')) {
