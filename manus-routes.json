@@ -1,5 +1,6 @@
 {
   "routes": [
-    { "path": "/", "title": "Mahadeva — Creative Portfolio" }
+    { "path": "/", "title": "Mahadeva — Creative Portfolio" },
+    { "path": "/edit-grade.html", "title": "Edit & Grade — Mahadeva Portfolio" }
   ]
 }

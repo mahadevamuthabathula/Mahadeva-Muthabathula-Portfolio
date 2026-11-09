@@ -102,7 +102,7 @@ form?.addEventListener('submit', (event) => {
 });
 
 // Keep keyboard users able to open a portfolio card without changing the calm visual language.
-workCards.forEach((card) => card.addEventListener('keydown', (event) => {
+workCards.filter((card) => card.tagName !== 'A').forEach((card) => card.addEventListener('keydown', (event) => {
   if (event.key === 'Enter' || event.key === ' ') {
     event.preventDefault();
     showToast(`${card.querySelector('h3')?.textContent || 'Project'} — case study coming soon.`);
