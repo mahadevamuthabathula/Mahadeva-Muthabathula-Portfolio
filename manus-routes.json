@@ -1,7 +1,9 @@
 {
   "routes": [
-    { "path": "/", "title": "Mahadeva — Creative Portfolio" },
-    { "path": "/edit-grade.html", "title": "Edit & Grade — Mahadeva Portfolio" },
-    { "path": "/material-surface.html", "title": "Material & Surface — Mahadeva Portfolio" }
+    { "path": "/", "title": "Mahadeva — Home" },
+    { "path": "/edit-grade.html", "title": "Edit & Grade — Mahadeva" },
+    { "path": "/material-surface.html", "title": "Material & Surface — Mahadeva" },
+    { "path": "/environment-study.html", "title": "Afterlight / 01 — Environment Study" },
+    { "path": "/object-texture.html", "title": "Between Forms — Object & Texture" }
   ]
 }

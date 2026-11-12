@@ -5,6 +5,8 @@ await mkdir('dist', { recursive: true });
 await cp('index.html', 'dist/index.html');
 await cp('edit-grade.html', 'dist/edit-grade.html');
 await cp('material-surface.html', 'dist/material-surface.html');
+await cp('environment-study.html', 'dist/environment-study.html');
+await cp('object-texture.html', 'dist/object-texture.html');
 await cp('sitemap.xml', 'dist/sitemap.xml');
 await cp('robots.txt', 'dist/robots.txt');
 await cp('styles.css', 'dist/styles.css');

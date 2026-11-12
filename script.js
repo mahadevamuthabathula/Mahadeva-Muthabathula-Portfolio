@@ -66,7 +66,85 @@ filterButtons.forEach((button) => {
 const form = document.querySelector('[data-contact-form]');
 const formStatus = document.querySelector('.form-status');
 const toast = document.querySelector('[data-toast]');
+const skillList = document.querySelector('.tool-list');
+const skillTooltip = document.querySelector('#skill-tooltip');
 let toastTimer;
+let activeSkill;
+
+function hideSkillTooltip() {
+  if (!skillTooltip) return;
+  skillTooltip.hidden = true;
+  activeSkill = undefined;
+}
+
+function positionSkillTooltip(button) {
+  const buttonRect = button.getBoundingClientRect();
+  const tooltipRect = skillTooltip.getBoundingClientRect();
+  const margin = 12;
+  const left = Math.max(margin, Math.min(buttonRect.left, window.innerWidth - tooltipRect.width - margin));
+  const top = buttonRect.bottom + tooltipRect.height + margin <= window.innerHeight
+    ? buttonRect.bottom + margin
+    : buttonRect.top - tooltipRect.height - margin >= margin
+      ? buttonRect.top - tooltipRect.height - margin
+      : margin;
+  skillTooltip.style.left = `${left}px`;
+  skillTooltip.style.top = `${top}px`;
+}
+
+function showSkillTooltip(button) {
+  if (!skillTooltip) return;
+  activeSkill = button;
+  skillTooltip.textContent = button.dataset.skillInfo;
+  skillTooltip.hidden = false;
+  positionSkillTooltip(button);
+}
+
+function updateSkillTooltipPosition() {
+  if (!activeSkill) return;
+  const buttonRect = activeSkill.getBoundingClientRect();
+  if (buttonRect.bottom < 0 || buttonRect.top > window.innerHeight) {
+    if (!activeSkill.matches(':focus')) hideSkillTooltip();
+    return;
+  }
+  positionSkillTooltip(activeSkill);
+}
+
+skillList?.addEventListener('pointerover', (event) => {
+  const button = event.target.closest('.skill-chip');
+  if (button && button !== activeSkill) showSkillTooltip(button);
+});
+
+skillList?.addEventListener('pointerout', (event) => {
+  const button = event.target.closest('.skill-chip');
+  if (button && !button.contains(event.relatedTarget) && button === activeSkill) hideSkillTooltip();
+});
+
+skillList?.addEventListener('focusin', (event) => {
+  const button = event.target.closest('.skill-chip');
+  if (button) showSkillTooltip(button);
+});
+
+skillList?.addEventListener('click', (event) => {
+  const button = event.target.closest('.skill-chip');
+  if (button) showSkillTooltip(button);
+});
+
+skillList?.addEventListener('focusout', (event) => {
+  const nextButton = event.relatedTarget?.closest('.skill-chip');
+  if (nextButton) showSkillTooltip(nextButton);
+  else hideSkillTooltip();
+});
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') hideSkillTooltip();
+});
+
+document.addEventListener('pointerdown', (event) => {
+  if (activeSkill && !skillList?.contains(event.target)) hideSkillTooltip();
+});
+
+window.addEventListener('scroll', updateSkillTooltipPosition, { passive: true });
+window.addEventListener('resize', hideSkillTooltip);
 
 function showToast(message) {
   if (!toast) return;
