@@ -93,26 +93,14 @@ form?.addEventListener('submit', async (event) => {
     return;
   }
 
-  const payload = Object.fromEntries(formData.entries());
-  payload._subject = `Portfolio enquiry from ${name}`;
-  payload._replyto = email;
   if (submitButton) submitButton.disabled = true;
   formStatus.textContent = 'Sending your enquiry…';
 
   try {
-    const response = await fetch(form.action, {
-      method: form.method,
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(payload)
-    });
-    const result = await response.json();
-    if (!response.ok || (result.success !== true && result.success !== 'true')) {
-      throw new Error(result.message || 'The enquiry could not be sent.');
-    }
-
+    if (!window.emailjs) throw new Error('The email service did not load.');
+    form.elements.namedItem('title').value = `Portfolio enquiry from ${name}`;
+    form.elements.namedItem('time').value = new Date().toLocaleString();
+    await window.emailjs.sendForm('default_service', 'template_jmjy0hk', form);
     form.reset();
     formStatus.textContent = 'Thanks — your enquiry has been sent. I’ll be in touch soon.';
   } catch (error) {
@@ -121,8 +109,11 @@ form?.addEventListener('submit', async (event) => {
     const fallbackLink = document.createElement('a');
     fallbackLink.href = `mailto:mahadevamuthabathula@gmail.com?subject=${subject}&body=${body}`;
     fallbackLink.textContent = 'send it by email instead';
+    const errorMessage = error instanceof Error
+      ? error.message
+      : error?.text || 'The email service is temporarily unavailable.';
     formStatus.replaceChildren(
-      document.createTextNode(`${error.message} Please try again or `),
+      document.createTextNode(`${errorMessage} Please try again or `),
       fallbackLink,
       document.createTextNode('.')
     );

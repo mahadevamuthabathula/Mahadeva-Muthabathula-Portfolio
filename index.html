@@ -159,8 +159,9 @@
       <section class="contact section-shell section-lined" id="contact" aria-labelledby="contact-title">
         <div class="contact-grid">
           <div class="contact-copy reveal"><h2 id="contact-title">Have a story<br /><em>in mind?</em></h2><p>Tell me where the idea is going. I am always open to thoughtful collaborations in 3D, post-production, color, and visual storytelling.</p><div class="contact-details"><a href="mailto:mahadevamuthabathula@gmail.com">mahadevamuthabathula@gmail.com</a><a href="tel:+919515213382">+91 9515213382</a><a class="instagram-link" href="https://instagram.com/the.inosuke_" target="_blank" rel="noopener noreferrer" aria-label="Instagram profile @the.inosuke_ (opens in a new tab)"><img src="./instagram-logo.svg" alt="" /><span>@the.inosuke_</span></a><span>Hyderabad / India</span></div></div>
-          <form class="contact-form reveal reveal-delay" action="https://formsubmit.co/ajax/mahadevamuthabathula@gmail.com" method="POST" data-contact-form>
-            <input type="hidden" name="_subject" value="New portfolio enquiry" />
+          <form class="contact-form reveal reveal-delay" data-contact-form>
+            <input id="title" name="title" type="hidden" value="Portfolio enquiry" />
+            <input id="time" name="time" type="hidden" />
             <label for="name">Your name<input id="name" name="name" type="text" placeholder="Name" required /></label>
             <label for="email">Email address<input id="email" name="email" type="email" placeholder="name@studio.com" required /></label>
             <label for="message">A little about the project<textarea id="message" name="message" rows="4" placeholder="What are you making?" required></textarea></label>
@@ -177,6 +178,14 @@
       </section>
     </main>
     <div class="toast" role="status" aria-live="polite" data-toast></div>
-    <script src="./script.js?v=mailto-enquiry-1"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@5/dist/email.min.js"></script>
+    <script type="text/javascript">
+      (function () {
+        emailjs.init({
+          publicKey: "uVgziR3IHmN7TB70n",
+        });
+      })();
+    </script>
+    <script src="./script.js?v=emailjs-enquiry-1"></script>
   </body>
 </html>
