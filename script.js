@@ -157,7 +157,7 @@ function showToast(message) {
 form?.addEventListener('submit', async (event) => {
   event.preventDefault();
   if (!formStatus) {
-    showToast('Please email your enquiry to mahadevamuthabathula@gmail.com.');
+    showToast('Please email your message to mahadevamuthabathula@gmail.com.');
     return;
   }
 
@@ -167,22 +167,22 @@ form?.addEventListener('submit', async (event) => {
   const email = String(formData.get('email') || '').trim();
   const message = String(formData.get('message') || '').trim();
   if (!name || !email || !message) {
-    formStatus.textContent = 'Please complete all fields before sending your enquiry.';
+    formStatus.textContent = 'Please complete all fields before sending your message.';
     return;
   }
 
   if (submitButton) submitButton.disabled = true;
-  formStatus.textContent = 'Sending your enquiry…';
+  formStatus.textContent = 'Sending your message…';
 
   try {
     if (!window.emailjs) throw new Error('The email service did not load.');
-    form.elements.namedItem('title').value = `Portfolio enquiry from ${name}`;
+    form.elements.namedItem('title').value = `Portfolio message from ${name}`;
     form.elements.namedItem('time').value = new Date().toLocaleString();
     await window.emailjs.sendForm('default_service', 'template_jmjy0hk', form);
     form.reset();
-    formStatus.textContent = 'Thanks — your enquiry has been sent. I’ll be in touch soon.';
+    formStatus.textContent = 'Thanks — your message has been sent. I’ll be in touch soon.';
   } catch (error) {
-    const subject = encodeURIComponent(`Portfolio enquiry from ${name}`);
+    const subject = encodeURIComponent(`Portfolio message from ${name}`);
     const body = encodeURIComponent(`Name: ${name}\r\nEmail: ${email}\r\n\r\n${message}`);
     const fallbackLink = document.createElement('a');
     fallbackLink.href = `mailto:mahadevamuthabathula@gmail.com?subject=${subject}&body=${body}`;
