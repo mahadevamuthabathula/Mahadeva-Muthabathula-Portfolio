@@ -26,7 +26,7 @@ A cinematic contact-sheet layout with frame counters, crop marks, and darker ton
 - **Typography system:** `Cormorant Garamond` for display and pull quotes; `DM Sans` for labels, body, controls, and metadata. Use fluid `clamp()` sizes and comfortable line-height.
 - **Brand essence:** a visual storyteller who moves between worlds — 3D, texture, edit, and grade — with patience and precision.
 - **Brand voice:** quiet confidence, specific craft language, collaborative, observant, and warm.
-- **Wordmark / logo:** `M.` monogram in a square, paired with `Muthabathula Mahadeva` in uppercase tracking.
+- **Wordmark / logo:** `M.` monogram in a square, paired with `Mahadeva Muthabathula` in uppercase tracking.
 - **Signature brand color:** clay `#b87355`, used sparingly as a film-burn accent and for focus states.
 
 ## Asset plan
