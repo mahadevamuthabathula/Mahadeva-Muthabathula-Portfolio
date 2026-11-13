@@ -8,7 +8,7 @@ await cp('material-surface.html', 'dist/material-surface.html');
 await cp('environment-study.html', 'dist/environment-study.html');
 await cp('object-texture.html', 'dist/object-texture.html');
 await cp('photography.html', 'dist/photography.html');
-await cp('resume.html', 'dist/resume.html');
+await cp('Mahadeva-Muthabathula-Resume.pdf', 'dist/Mahadeva-Muthabathula-Resume.pdf');
 await cp('sitemap.xml', 'dist/sitemap.xml');
 await cp('robots.txt', 'dist/robots.txt');
 await cp('styles.css', 'dist/styles.css');
