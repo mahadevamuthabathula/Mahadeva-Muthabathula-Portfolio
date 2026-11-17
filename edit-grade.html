@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Rokkitt:wght@400;500;600;700&family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="./css/styles.css?v=color-lab-mobile-1" />
+    <link rel="stylesheet" href="./css/styles.css?v=color-lab-reel-16-9-2" />
   </head>
   <body class="client-directory-page">
     <a class="skip-link" href="#main-content">Skip to content</a>
@@ -94,6 +94,27 @@
             </div>
           </div>
         </section>
+        <section class="reel-comparison-section" aria-labelledby="reel-comparison-title">
+          <h2 id="reel-comparison-title">Color grading reel · Log to Final</h2>
+          <div class="reel-slider" data-reel-slider>
+            <video class="stage-final" data-video-src="./assets/color-lab/Final.mp4" poster="./assets/color-lab/Final.png" muted playsinline preload="none" aria-hidden="true"></video>
+            <video class="stage-rec" data-video-src="./assets/color-lab/Rec%20709.mp4" poster="./assets/color-lab/Rec%20709.png" muted playsinline preload="none" aria-hidden="true"></video>
+            <video class="stage-log" data-video-src="./assets/color-lab/Log.mp4" poster="./assets/color-lab/Log.png" muted playsinline preload="none" aria-hidden="true"></video>
+
+            <span class="stage-label label-log">Log</span>
+            <span class="stage-label label-rec">Rec.709</span>
+            <span class="stage-label label-final">Final Grade</span>
+
+            <div class="stage-handle h1" role="slider" tabindex="0" aria-label="Move divider between Log and Rec.709" aria-orientation="horizontal" aria-valuemin="0" aria-valuemax="54" aria-valuenow="33">
+              <span aria-hidden="true">↔</span>
+            </div>
+            <div class="stage-handle h2" role="slider" tabindex="0" aria-label="Move divider between Rec.709 and Final grade" aria-orientation="horizontal" aria-valuemin="45" aria-valuemax="100" aria-valuenow="66">
+              <span aria-hidden="true">↔</span>
+            </div>
+            <button class="reel-play" type="button" aria-label="Pause video" disabled>❚❚</button>
+            <div class="reel-loading" role="status" aria-live="polite">Loading video…</div>
+          </div>
+        </section>
 
         <section class="collaborators-section" aria-labelledby="collaborators-title">
           <div class="collaborators-heading">
@@ -121,6 +142,6 @@
         </section>
       </section>
     </main>
-    <script src="./js/script.js?v=color-lab-mobile-1"></script>
+    <script src="./js/script.js?v=color-lab-reel-16-9-3"></script>
   </body>
 </html>

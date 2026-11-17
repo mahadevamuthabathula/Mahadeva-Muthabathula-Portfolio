@@ -408,6 +408,15 @@ h3 { margin-bottom: .8rem; font-size: 2rem; letter-spacing: -.035em; }
 @media (prefers-reduced-motion: reduce) {
   .stage-handle span, .stage-label { transition: none; }
 }
+.reel-comparison-section { display: grid; justify-items: center; gap: 1.5rem; border-top: 1px solid var(--line); padding: clamp(3rem, 6vw, 4.5rem) 0; }
+.reel-comparison-section h2 { justify-self: stretch; margin: 0; font-size: clamp(2.1rem, 4vw, 3.25rem); }
+.reel-slider { --p1: 33%; --p2: 66%; position: relative; width: min(100%, 1100px); aspect-ratio: 16 / 9; overflow: hidden; border-radius: 14px; background: #000; user-select: none; -webkit-user-select: none; touch-action: pan-y; }
+.reel-slider video { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+.reel-play { position: absolute; z-index: 6; bottom: 1rem; left: 50%; display: grid; width: 48px; height: 48px; place-items: center; transform: translateX(-50%); border: 2px solid #fff; border-radius: 50%; background: rgba(0, 0, 0, .55); color: #fff; font-size: 16px; cursor: pointer; touch-action: manipulation; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.reel-play:disabled { cursor: wait; opacity: .7; }
+.reel-play:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.reel-loading { position: absolute; z-index: 7; inset: 0; display: grid; place-items: center; background: rgba(0, 0, 0, .6); color: #fff; font-size: 13px; letter-spacing: .06em; transition: opacity .3s ease; }
+.reel-loading.done { opacity: 0; pointer-events: none; }
 .materials-page { padding-top: 6.5rem; padding-bottom: clamp(5rem, 12vw, 9rem); }
 .materials-hero { max-width: 68rem; margin: 0 auto; padding: clamp(2rem, 5vw, 4rem) 0 clamp(3rem, 7vw, 5rem); }
 .materials-hero h1 { max-width: 11ch; margin: 1.5rem 0; font-size: clamp(3.2rem, 7vw, 6rem); }
@@ -576,4 +585,5 @@ h3 { margin-bottom: .8rem; font-size: 2rem; letter-spacing: -.035em; }
   .reveal { opacity: 1; transform: none; }
   .hero-copy.is-visible .eyebrow-line, .hero-art.is-visible .art-frame-back, .hero-art.is-visible .art-frame-front { animation: none; }
   .work-card[href]:hover .work-visual img, .work-card[href]:focus-visible .work-visual img, .photography-card > a:hover img, .photography-card > a:focus-visible img { transform: none; }
+  .reel-loading { transition: none; }
 }

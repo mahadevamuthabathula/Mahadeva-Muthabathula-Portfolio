@@ -150,6 +150,215 @@ document.querySelectorAll('[data-stage-slider]').forEach((slider) => {
   render();
 });
 
+document.querySelectorAll('[data-reel-slider]').forEach((slider) => {
+  const firstHandle = slider.querySelector('.stage-handle.h1');
+  const secondHandle = slider.querySelector('.stage-handle.h2');
+  const logLabel = slider.querySelector('.label-log');
+  const recLabel = slider.querySelector('.label-rec');
+  const finalLabel = slider.querySelector('.label-final');
+  const videos = [...slider.querySelectorAll('video[data-video-src]')];
+  const master = slider.querySelector('.stage-final');
+  const playButton = slider.querySelector('.reel-play');
+  const loading = slider.querySelector('.reel-loading');
+  if (!firstHandle || !secondHandle || !logLabel || !recLabel || !finalLabel
+    || videos.length !== 3 || !master || !playButton || !loading) return;
+
+  const minimumGap = 12;
+  let firstPosition = 33;
+  let secondPosition = 66;
+  const readyVideos = new Set();
+  let wantPlaying = true;
+  let inView = false;
+  let failed = false;
+  let resetting = false;
+  let buffering = false;
+
+  const clamp = (value, minimum, maximum) => Math.min(maximum, Math.max(minimum, value));
+  const render = () => {
+    slider.style.setProperty('--p1', `${firstPosition}%`);
+    slider.style.setProperty('--p2', `${secondPosition}%`);
+    firstHandle.setAttribute('aria-valuenow', String(Math.round(firstPosition)));
+    firstHandle.setAttribute('aria-valuemin', '0');
+    firstHandle.setAttribute('aria-valuemax', String(Math.round(secondPosition - minimumGap)));
+    secondHandle.setAttribute('aria-valuenow', String(Math.round(secondPosition)));
+    secondHandle.setAttribute('aria-valuemin', String(Math.round(firstPosition + minimumGap)));
+    secondHandle.setAttribute('aria-valuemax', '100');
+    logLabel.classList.toggle('hide', firstPosition < 22);
+    recLabel.classList.toggle('hide', secondPosition - firstPosition < 28);
+    finalLabel.classList.toggle('hide', 100 - secondPosition < 26);
+  };
+  const setHandle = (which, value) => {
+    if (which === 1) firstPosition = clamp(value, 0, secondPosition - minimumGap);
+    else secondPosition = clamp(value, firstPosition + minimumGap, 100);
+    render();
+  };
+  const positionFromEvent = (event) => {
+    const bounds = slider.getBoundingClientRect();
+    return ((event.clientX - bounds.left) / bounds.width) * 100;
+  };
+  const bindDrag = (handle, which) => {
+    handle.addEventListener('pointerdown', (event) => {
+      if (!event.isPrimary || (event.pointerType === 'mouse' && event.button !== 0)) return;
+      event.preventDefault();
+      handle.focus();
+      handle.setPointerCapture(event.pointerId);
+      handle.classList.add('dragging');
+      setHandle(which, positionFromEvent(event));
+    });
+    handle.addEventListener('pointermove', (event) => {
+      if (handle.hasPointerCapture(event.pointerId)) setHandle(which, positionFromEvent(event));
+    });
+    const endDrag = (event) => {
+      handle.classList.remove('dragging');
+      if (handle.hasPointerCapture(event.pointerId)) handle.releasePointerCapture(event.pointerId);
+    };
+    handle.addEventListener('pointerup', endDrag);
+    handle.addEventListener('pointercancel', endDrag);
+    handle.addEventListener('keydown', (event) => {
+      const currentPosition = which === 1 ? firstPosition : secondPosition;
+      const step = event.shiftKey ? 10 : 2;
+      if (event.key === 'ArrowLeft') setHandle(which, currentPosition - step);
+      else if (event.key === 'ArrowRight') setHandle(which, currentPosition + step);
+      else return;
+      event.preventDefault();
+    });
+  };
+
+  bindDrag(firstHandle, 1);
+  bindDrag(secondHandle, 2);
+  slider.addEventListener('pointerdown', (event) => {
+    if (event.target.closest('.stage-handle, .reel-play')) return;
+    const position = positionFromEvent(event);
+    setHandle(Math.abs(position - firstPosition) < Math.abs(position - secondPosition) ? 1 : 2, position);
+  });
+
+  const pauseAll = () => videos.forEach((video) => video.pause());
+  const resetAllToStart = () => {
+    if (resetting) return;
+    resetting = true;
+    pauseAll();
+    Promise.all(videos.map((video) => {
+      if (video.currentTime === 0) return Promise.resolve();
+      return new Promise((resolve) => {
+        video.addEventListener('seeked', resolve, { once: true });
+        video.currentTime = 0;
+      });
+    })).then(() => {
+      resetting = false;
+      applyPlayback();
+    });
+  };
+  const updateButton = () => {
+    const playing = wantPlaying && inView && readyVideos.size === videos.length && !failed;
+    playButton.textContent = wantPlaying ? '❚❚' : '▶';
+    playButton.setAttribute('aria-label', wantPlaying ? 'Pause video' : 'Play video');
+    playButton.disabled = failed || readyVideos.size !== videos.length;
+    return playing;
+  };
+  const playAll = () => {
+    if (Number.isFinite(master.duration) && master.currentTime >= master.duration - 0.08) {
+      resetAllToStart();
+      return;
+    }
+    videos.forEach((video) => {
+      if (!video.paused) return;
+      const request = video.play();
+      if (request && request.catch) {
+        request.catch(() => {
+          wantPlaying = false;
+          pauseAll();
+          updateButton();
+        });
+      }
+    });
+  };
+  const applyPlayback = () => {
+    const shouldPlay = updateButton();
+    if (!resetting && shouldPlay) playAll();
+    else pauseAll();
+  };
+  const onReady = (video) => {
+    if (readyVideos.has(video)) return;
+    readyVideos.add(video);
+    if (readyVideos.size === videos.length) {
+      loading.textContent = 'Video ready.';
+      loading.classList.add('done');
+      videos.forEach((clip) => { clip.currentTime = 0; });
+      applyPlayback();
+    }
+  };
+  const loadVideo = (video) => {
+    if (video.hasAttribute('src')) return;
+    video.src = video.dataset.videoSrc;
+    video.addEventListener('canplay', () => onReady(video), { once: true });
+    video.addEventListener('error', () => {
+      failed = true;
+      loading.textContent = 'Video unavailable.';
+      loading.classList.remove('done');
+      applyPlayback();
+    }, { once: true });
+    video.load();
+    if (video.readyState >= 3) onReady(video);
+  };
+
+  playButton.addEventListener('click', () => {
+    wantPlaying = !wantPlaying;
+    applyPlayback();
+  });
+  window.setInterval(() => {
+    if (master.paused || !wantPlaying || !inView) return;
+    const time = master.currentTime;
+    videos.forEach((video) => {
+      if (video !== master && Math.abs(video.currentTime - time) > 0.08) video.currentTime = time;
+    });
+  }, 250);
+  master.addEventListener('seeked', () => {
+    videos.forEach((video) => {
+      if (video !== master) video.currentTime = master.currentTime;
+    });
+  });
+  master.addEventListener('timeupdate', () => {
+    if (!Number.isFinite(master.duration) || master.currentTime < master.duration - 0.08) return;
+    resetAllToStart();
+  });
+  master.addEventListener('ended', resetAllToStart);
+  videos.forEach((video) => {
+    video.addEventListener('waiting', () => {
+      if (!wantPlaying || !inView) return;
+      buffering = true;
+      pauseAll();
+    });
+    video.addEventListener('canplay', () => {
+      if (!buffering || !videos.every((clip) => clip.readyState >= 3)) return;
+      buffering = false;
+      applyPlayback();
+    });
+    video.addEventListener('playing', () => {
+      if (wantPlaying && inView && !buffering && videos.some((clip) => clip.paused)) playAll();
+    });
+  });
+
+  if ('IntersectionObserver' in window) {
+    const loadObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        videos.forEach(loadVideo);
+        observer.unobserve(slider);
+      });
+    }, { rootMargin: '200px 0px' });
+    loadObserver.observe(slider);
+    new IntersectionObserver((entries) => {
+      inView = entries[0].isIntersecting;
+      if (readyVideos.size === videos.length) applyPlayback();
+    }, { threshold: 0.25 }).observe(slider);
+  } else {
+    inView = true;
+    videos.forEach(loadVideo);
+  }
+
+  render();
+});
+
 const form = document.querySelector('[data-contact-form]');
 const formStatus = document.querySelector('.form-status');
 const toast = document.querySelector('[data-toast]');
