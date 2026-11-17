@@ -60,6 +60,40 @@
             <p class="craft-note">I keep the edit and grade connected, checking that the visual treatment supports the agreed direction and remains consistent from shot to shot.</p>
           </div>
         </section>
+        <section class="color-lab-section" aria-labelledby="color-lab-title">
+          <h2 id="color-lab-title">Color Lab</h2>
+          <div class="compare-slider ba-compare" data-compare style="--compare-position: 64%;">
+            <picture>
+              <img class="compare-image compare-after" src="./assets/color-lab/wedding-after.png" alt="Wedding film contact sheet after color grading" fetchpriority="high" loading="eager" />
+            </picture>
+            <picture>
+              <img class="compare-image compare-before" src="./assets/color-lab/wedding-before.png" alt="Wedding film contact sheet before color grading" loading="eager" />
+            </picture>
+            <span class="compare-label before-label">Before · Original</span>
+            <span class="compare-label after-label">After · Final Grade</span>
+            <span class="compare-divider" aria-hidden="true"><i>↔</i></span>
+            <input class="compare-range" type="range" min="0" max="100" value="64" aria-label="Compare the original and final wedding film grade" />
+          </div>
+        </section>
+        <section class="stage-comparison-section" aria-labelledby="stage-comparison-title">
+          <h2 id="stage-comparison-title">Grade stages · Log to Final</h2>
+          <div class="stage-slider" data-stage-slider>
+            <img class="stage-final" src="./assets/color-lab/Final.png" alt="Final graded look" width="1214" height="2160" loading="lazy" draggable="false" />
+            <img class="stage-rec" src="./assets/color-lab/Rec%20709.png" alt="Rec.709 conversion" width="1214" height="2160" loading="lazy" draggable="false" />
+            <img class="stage-log" src="./assets/color-lab/Log.png" alt="Original log footage" width="1214" height="2160" loading="lazy" draggable="false" />
+
+            <span class="stage-label label-log">Log</span>
+            <span class="stage-label label-rec">Rec.709</span>
+            <span class="stage-label label-final">Final Grade</span>
+
+            <div class="stage-handle h1" role="slider" tabindex="0" aria-label="Move divider between Log and Rec.709" aria-orientation="horizontal" aria-valuemin="0" aria-valuemax="54" aria-valuenow="33">
+              <span aria-hidden="true">↔</span>
+            </div>
+            <div class="stage-handle h2" role="slider" tabindex="0" aria-label="Move divider between Rec.709 and Final grade" aria-orientation="horizontal" aria-valuemin="45" aria-valuemax="100" aria-valuenow="66">
+              <span aria-hidden="true">↔</span>
+            </div>
+          </div>
+        </section>
 
         <section class="collaborators-section" aria-labelledby="collaborators-title">
           <div class="collaborators-heading">

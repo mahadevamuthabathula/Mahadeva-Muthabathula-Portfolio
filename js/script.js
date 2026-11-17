@@ -63,6 +63,93 @@ filterButtons.forEach((button) => {
   });
 });
 
+document.querySelectorAll('[data-compare]').forEach((slider) => {
+  const range = slider.querySelector('.compare-range');
+  if (!range) return;
+
+  const update = () => {
+    slider.style.setProperty('--compare-position', range.value + '%');
+  };
+
+  range.addEventListener('input', update);
+  update();
+});
+
+document.querySelectorAll('[data-stage-slider]').forEach((slider) => {
+  const firstHandle = slider.querySelector('.stage-handle.h1');
+  const secondHandle = slider.querySelector('.stage-handle.h2');
+  const logLabel = slider.querySelector('.label-log');
+  const recLabel = slider.querySelector('.label-rec');
+  const finalLabel = slider.querySelector('.label-final');
+  if (!firstHandle || !secondHandle || !logLabel || !recLabel || !finalLabel) return;
+
+  const minimumGap = 12;
+  let firstPosition = 33;
+  let secondPosition = 66;
+
+  const clamp = (value, minimum, maximum) => Math.min(maximum, Math.max(minimum, value));
+  const render = () => {
+    slider.style.setProperty('--p1', `${firstPosition}%`);
+    slider.style.setProperty('--p2', `${secondPosition}%`);
+    firstHandle.setAttribute('aria-valuenow', String(Math.round(firstPosition)));
+    firstHandle.setAttribute('aria-valuemin', '0');
+    firstHandle.setAttribute('aria-valuemax', String(Math.round(secondPosition - minimumGap)));
+    secondHandle.setAttribute('aria-valuenow', String(Math.round(secondPosition)));
+    secondHandle.setAttribute('aria-valuemin', String(Math.round(firstPosition + minimumGap)));
+    secondHandle.setAttribute('aria-valuemax', '100');
+    logLabel.classList.toggle('hide', firstPosition < 22);
+    recLabel.classList.toggle('hide', secondPosition - firstPosition < 28);
+    finalLabel.classList.toggle('hide', 100 - secondPosition < 26);
+  };
+  const setHandle = (which, value) => {
+    if (which === 1) firstPosition = clamp(value, 0, secondPosition - minimumGap);
+    else secondPosition = clamp(value, firstPosition + minimumGap, 100);
+    render();
+  };
+  const positionFromEvent = (event) => {
+    const bounds = slider.getBoundingClientRect();
+    return ((event.clientX - bounds.left) / bounds.width) * 100;
+  };
+  const bindDrag = (handle, which) => {
+    handle.addEventListener('pointerdown', (event) => {
+      if (!event.isPrimary || (event.pointerType === 'mouse' && event.button !== 0)) return;
+      event.preventDefault();
+      handle.focus();
+      handle.setPointerCapture(event.pointerId);
+      handle.classList.add('dragging');
+      setHandle(which, positionFromEvent(event));
+    });
+    handle.addEventListener('pointermove', (event) => {
+      if (handle.hasPointerCapture(event.pointerId)) setHandle(which, positionFromEvent(event));
+    });
+    const endDrag = (event) => {
+      handle.classList.remove('dragging');
+      if (handle.hasPointerCapture(event.pointerId)) handle.releasePointerCapture(event.pointerId);
+    };
+    handle.addEventListener('pointerup', endDrag);
+    handle.addEventListener('pointercancel', endDrag);
+    handle.addEventListener('keydown', (event) => {
+      const currentPosition = which === 1 ? firstPosition : secondPosition;
+      const step = event.shiftKey ? 10 : 2;
+      if (event.key === 'ArrowLeft') setHandle(which, currentPosition - step);
+      else if (event.key === 'ArrowRight') setHandle(which, currentPosition + step);
+      else return;
+      event.preventDefault();
+    });
+  };
+
+  bindDrag(firstHandle, 1);
+  bindDrag(secondHandle, 2);
+
+  slider.addEventListener('pointerdown', (event) => {
+    if (event.target.closest('.stage-handle')) return;
+    const position = positionFromEvent(event);
+    setHandle(Math.abs(position - firstPosition) < Math.abs(position - secondPosition) ? 1 : 2, position);
+  });
+
+  render();
+});
+
 const form = document.querySelector('[data-contact-form]');
 const formStatus = document.querySelector('.form-status');
 const toast = document.querySelector('[data-toast]');
